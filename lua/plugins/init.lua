@@ -31,6 +31,8 @@ return {
         "stylua",
         "black",
         "isort",
+        "gofumpt",
+        "shfmt",
       },
     },
   },
@@ -192,7 +194,11 @@ return {
     "echasnovski/mini.ai",
     event = "VeryLazy",
     config = function()
-      require("mini.ai").setup()
+      require("mini.ai").setup {
+        custom_textobjects = {
+          a = false, -- defer to treesitter-textobjects for aa/ia
+        },
+      }
     end,
   },
 
@@ -284,7 +290,7 @@ return {
     event = "VeryLazy",
     config = function()
       require("neoscroll").setup {
-        mappings = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "zt", "zz", "zb" },
+        mappings = { "<C-b>", "<C-f>", "zt", "zz", "zb" },
         hide_cursor = true,
         easing = "quadratic",
       }
@@ -306,9 +312,6 @@ return {
   {
     "famiu/bufdelete.nvim",
     cmd = { "Bdelete", "Bwipeout" },
-    keys = {
-      { "<leader>bd", "<cmd>Bdelete<cr>", desc = "Delete Buffer" },
-    },
   },
 
   {

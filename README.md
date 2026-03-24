@@ -2,7 +2,9 @@
 
 Dilmune's interpretation of Neovim. Clean, opinionated, and ready to go.
 
-Built on [NvChad v2.5](https://github.com/NvChad/NvChad) with a custom dark theme and 50+ curated plugins.
+Built on [NvChad v2.5](https://github.com/NvChad/NvChad) with a custom dark theme and 40+ curated plugins.
+
+Requires **Neovim >= 0.11**.
 
 > [nvim.dilmune.com](https://nvim.dilmune.com) — coming soon
 

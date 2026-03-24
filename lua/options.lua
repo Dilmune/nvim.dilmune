@@ -23,8 +23,6 @@ o.tabstop = 2
 o.softtabstop = 2
 o.smartindent = true
 o.wrap = false
-o.linebreak = true
-o.breakindent = true
 
 o.ignorecase = true
 o.smartcase = true
@@ -34,7 +32,6 @@ o.incsearch = true
 o.updatetime = 250
 o.timeoutlen = 300
 o.lazyredraw = false
-o.ttyfast = true
 
 o.backup = false
 o.writebackup = false
@@ -48,8 +45,7 @@ opt.clipboard = "unnamedplus"
 opt.list = true
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
-o.foldmethod = "expr"
-o.foldexpr = "nvim_treesitter#foldexpr()"
+o.foldmethod = "indent"
 o.foldlevel = 99
 o.foldenable = true
 
