@@ -85,6 +85,8 @@ autocmd("FileType", {
   callback = function()
     vim.opt_local.wrap = true
     vim.opt_local.spell = true
+    vim.opt_local.linebreak = true
+    vim.opt_local.breakindent = true
   end,
 })
 
@@ -104,6 +106,22 @@ autocmd("TermOpen", {
     vim.opt_local.relativenumber = false
     vim.opt_local.signcolumn = "no"
     vim.cmd "startinsert"
+  end,
+})
+
+autocmd("BufReadPre", {
+  group = general,
+  callback = function()
+    local file = vim.fn.expand "<afile>"
+    local size = vim.fn.getfsize(file)
+    if size > 1024 * 1024 then
+      vim.opt_local.syntax = "off"
+      vim.opt_local.filetype = ""
+      vim.opt_local.undofile = false
+      vim.opt_local.swapfile = false
+      vim.opt_local.foldmethod = "manual"
+      vim.b.large_file = true
+    end
   end,
 })
 

@@ -287,10 +287,11 @@ return {
         { "<leader>q", group = "session" },
         { "<leader>s", group = "search" },
         { "<leader>c", group = "code" },
-        { "<leader>t", group = "test/tree" },
+        { "<leader>t", group = "test" },
         { "<leader>r", group = "refactor" },
         { "<leader>b", group = "buffer" },
         { "<leader>d", group = "debug" },
+        { "<leader>m", group = "terminal" },
       },
     },
   },
@@ -431,8 +432,8 @@ return {
     },
     keys = {
       { "<leader>o", "<cmd>AerialToggle!<cr>", desc = "Toggle code outline" },
-      { "{", function() require("aerial").prev() end, desc = "Previous symbol" },
-      { "}", function() require("aerial").next() end, desc = "Next symbol" },
+      { "[s", function() require("aerial").prev() end, desc = "Previous symbol" },
+      { "]s", function() require("aerial").next() end, desc = "Next symbol" },
     },
     opts = {
       backends = { "treesitter", "lsp", "markdown", "man" },
@@ -465,6 +466,9 @@ return {
       autojump = true,
       close_on_select = false,
       attach_mode = "global",
+      on_attach = function(bufnr)
+        vim.api.nvim_buf_set_option(bufnr, "winbar", "%{%v:lua.require('aerial').get_location()%}")
+      end,
       lsp = {
         diagnostics_trigger_update = true,
       },
@@ -511,6 +515,87 @@ return {
       }
       vim.notify = notify
     end,
+  },
+
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    keys = {
+      { "<C-\\>", desc = "Toggle bottom terminal" },
+      { "<A-i>", desc = "Toggle float terminal" },
+      { "<A-h>", desc = "Toggle horizontal terminal" },
+      { "<A-v>", desc = "Toggle vertical terminal" },
+      { "<leader>mc", desc = "Claude Code" },
+      { "<leader>mg", desc = "LazyGit terminal" },
+    },
+    config = function()
+      require("toggleterm").setup {
+        size = function(term)
+          if term.direction == "horizontal" then
+            return 15
+          elseif term.direction == "vertical" then
+            return vim.o.columns * 0.4
+          end
+        end,
+        open_mapping = "<C-\\>",
+        direction = "horizontal",
+        shade_terminals = true,
+        shading_factor = -10,
+        float_opts = {
+          border = "rounded",
+          width = function() return math.floor(vim.o.columns * 0.85) end,
+          height = function() return math.floor(vim.o.lines * 0.85) end,
+        },
+      }
+
+      local Terminal = require("toggleterm.terminal").Terminal
+
+      local float_term = Terminal:new { direction = "float", hidden = true }
+      vim.keymap.set({ "n", "t" }, "<A-i>", function() float_term:toggle() end, { desc = "Toggle float terminal" })
+
+      local hterminal = Terminal:new { direction = "horizontal", hidden = true }
+      vim.keymap.set({ "n", "t" }, "<A-h>", function() hterminal:toggle() end, { desc = "Toggle horizontal terminal" })
+
+      local vterminal = Terminal:new { direction = "vertical", hidden = true }
+      vim.keymap.set({ "n", "t" }, "<A-v>", function() vterminal:toggle() end, { desc = "Toggle vertical terminal" })
+
+      local claude = Terminal:new {
+        cmd = "claude",
+        direction = "float",
+        hidden = true,
+        float_opts = {
+          border = "rounded",
+          width = function() return math.floor(vim.o.columns * 0.9) end,
+          height = function() return math.floor(vim.o.lines * 0.9) end,
+        },
+        on_open = function(term)
+          vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = term.bufnr, nowait = true })
+        end,
+      }
+      vim.keymap.set("n", "<leader>mc", function() claude:toggle() end, { desc = "Claude Code" })
+
+      local lazygit = Terminal:new {
+        cmd = "lazygit",
+        direction = "float",
+        hidden = true,
+        float_opts = {
+          border = "rounded",
+          width = function() return math.floor(vim.o.columns * 0.9) end,
+          height = function() return math.floor(vim.o.lines * 0.9) end,
+        },
+        on_open = function(term)
+          vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = term.bufnr, nowait = true })
+        end,
+      }
+      vim.keymap.set("n", "<leader>mg", function() lazygit:toggle() end, { desc = "LazyGit terminal" })
+    end,
+  },
+
+  {
+    "mbbill/undotree",
+    keys = {
+      { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Undo tree" },
+    },
   },
 
   {

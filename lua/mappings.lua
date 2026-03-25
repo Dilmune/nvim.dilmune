@@ -18,7 +18,7 @@ map("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 map("n", "<C-Up>", "<cmd>resize +2<CR>", { desc = "Increase window height" })
 map("n", "<C-Down>", "<cmd>resize -2<CR>", { desc = "Decrease window height" })
 map("n", "<C-Left>", "<cmd>vertical resize -2<CR>", { desc = "Decrease window width" })
-mapaaaaa("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Increase window width" })
+map("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Increase window width" })
 
 map("n", "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 map("n", "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
@@ -56,6 +56,7 @@ map("n", "<leader>fo", "<cmd>Telescope oldfiles<CR>", { desc = "Recent files" })
 map("n", "<leader>fc", "<cmd>Telescope git_commits<CR>", { desc = "Git commits" })
 map("n", "<leader>fs", "<cmd>Telescope git_status<CR>", { desc = "Git status" })
 map("n", "<leader>fd", "<cmd>Telescope diagnostics<CR>", { desc = "Diagnostics" })
+map("n", "<leader>fn", "<cmd>Telescope notify<CR>", { desc = "Notification history" })
 
 map("n", "<leader>gb", "<cmd>Gitsigns blame_line<CR>", { desc = "Blame line" })
 map("n", "<leader>gd", "<cmd>Gitsigns diffthis<CR>", { desc = "Diff this" })
@@ -67,15 +68,15 @@ map("v", "<leader>ae", "<cmd>AvanteEdit<CR>", { desc = "Edit selection with AI" 
 map("n", "<leader>ar", "<cmd>AvanteRefresh<CR>", { desc = "Refresh AI" })
 map("n", "<leader>at", "<cmd>AvanteToggle<CR>", { desc = "Toggle AI sidebar" })
 
-
-map("n", "<leader>tf", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file tree" })
-map("n", "<A-i>", function()
-  require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
-end, { desc = "Toggle floating terminal" })
-map("t", "<A-i>", function()
-  require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
-end, { desc = "Toggle floating terminal" })
+map("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "File explorer" })
+map("n", "<leader>u", "<cmd>UndotreeToggle<CR>", { desc = "Undo tree" })
 
 map("n", "<leader>fm", function()
   require("conform").format { lsp_format = "fallback" }
 end, { desc = "Format file" })
+
+map("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+map("t", "<C-h>", "<C-\\><C-n><C-w>h", { desc = "Move to left window" })
+map("t", "<C-j>", "<C-\\><C-n><C-w>j", { desc = "Move to bottom window" })
+map("t", "<C-k>", "<C-\\><C-n><C-w>k", { desc = "Move to top window" })
+map("t", "<C-l>", "<C-\\><C-n><C-w>l", { desc = "Move to right window" })
