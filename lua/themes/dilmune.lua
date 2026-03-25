@@ -156,6 +156,12 @@ M.polish_hl = {
     FlashLabel = { fg = M.base_30.black, bg = M.base_30.orange, bold = true },
     FlashCurrent = { fg = M.base_30.black, bg = M.base_30.yellow },
     FlashMatch = { fg = M.base_30.orange },
+    DapBreakpoint = { fg = M.base_30.red },
+    DapBreakpointCondition = { fg = M.base_30.yellow },
+    DapLogPoint = { fg = M.base_30.cyan },
+    DapStopped = { fg = M.base_30.green },
+    DapStoppedLine = { bg = "#1a2a1a" },
+    DapBreakpointRejected = { fg = M.base_30.grey },
   },
 }
 

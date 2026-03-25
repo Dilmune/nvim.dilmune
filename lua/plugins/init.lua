@@ -33,6 +33,10 @@ return {
         "isort",
         "gofumpt",
         "shfmt",
+        "debugpy",
+        "delve",
+        "js-debug-adapter",
+        "codelldb",
       },
     },
   },
@@ -283,9 +287,10 @@ return {
         { "<leader>q", group = "session" },
         { "<leader>s", group = "search" },
         { "<leader>c", group = "code" },
-        { "<leader>t", group = "terminal" },
+        { "<leader>t", group = "test/tree" },
         { "<leader>r", group = "refactor" },
         { "<leader>b", group = "buffer" },
+        { "<leader>d", group = "debug" },
       },
     },
   },
@@ -359,5 +364,194 @@ return {
     build = function()
       vim.fn["mkdp#util#install"]()
     end,
+  },
+
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      {
+        "rcarriga/nvim-dap-ui",
+        dependencies = { "nvim-neotest/nvim-nio" },
+      },
+      "theHamsta/nvim-dap-virtual-text",
+      "mfussenegger/nvim-dap-python",
+      "leoluz/nvim-dap-go",
+    },
+    keys = {
+      { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle breakpoint" },
+      { "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input "Condition: ") end, desc = "Conditional breakpoint" },
+      { "<leader>dc", function() require("dap").continue() end, desc = "Continue / Start" },
+      { "<leader>di", function() require("dap").step_into() end, desc = "Step into" },
+      { "<leader>do", function() require("dap").step_over() end, desc = "Step over" },
+      { "<leader>dO", function() require("dap").step_out() end, desc = "Step out" },
+      { "<leader>dr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
+      { "<leader>du", function() require("dapui").toggle() end, desc = "Toggle DAP UI" },
+      { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate" },
+      { "<leader>dl", function() require("dap").run_last() end, desc = "Run last" },
+      { "<leader>dk", function() require("dapui").eval() end, desc = "Eval under cursor" },
+      { "<leader>dk", mode = "v", function() require("dapui").eval() end, desc = "Eval selection" },
+    },
+    config = function()
+      require "configs.dap"
+    end,
+  },
+
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-neotest/neotest-python",
+      "nvim-neotest/neotest-jest",
+      "nvim-neotest/neotest-go",
+      "rouge8/neotest-rust",
+    },
+    keys = {
+      { "<leader>tr", function() require("neotest").run.run() end, desc = "Run nearest test" },
+      { "<leader>tT", function() require("neotest").run.run(vim.fn.expand "%") end, desc = "Run file tests" },
+      { "<leader>ts", function() require("neotest").summary.toggle() end, desc = "Toggle summary" },
+      { "<leader>to", function() require("neotest").output.open { enter_window = true } end, desc = "Show output" },
+      { "<leader>tp", function() require("neotest").output_panel.toggle() end, desc = "Toggle output panel" },
+      { "<leader>tl", function() require("neotest").run.run_last() end, desc = "Run last test" },
+      { "<leader>td", function() require("neotest").run.run { strategy = "dap" } end, desc = "Debug nearest test" },
+      { "<leader>tS", function() require("neotest").run.stop() end, desc = "Stop test" },
+    },
+    config = function()
+      require "configs.neotest"
+    end,
+  },
+
+  {
+    "stevearc/aerial.nvim",
+    event = "BufRead",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
+    keys = {
+      { "<leader>o", "<cmd>AerialToggle!<cr>", desc = "Toggle code outline" },
+      { "{", function() require("aerial").prev() end, desc = "Previous symbol" },
+      { "}", function() require("aerial").next() end, desc = "Next symbol" },
+    },
+    opts = {
+      backends = { "treesitter", "lsp", "markdown", "man" },
+      layout = {
+        min_width = 30,
+        max_width = 40,
+        default_direction = "right",
+        placement = "edge",
+      },
+      show_guides = true,
+      guides = {
+        mid_item = "├─",
+        last_item = "└─",
+        nested_top = "│ ",
+        whitespace = "  ",
+      },
+      filter_kind = {
+        "Class",
+        "Constructor",
+        "Enum",
+        "Function",
+        "Interface",
+        "Method",
+        "Module",
+        "Namespace",
+        "Struct",
+        "Type",
+      },
+      highlight_on_hover = true,
+      autojump = true,
+      close_on_select = false,
+      attach_mode = "global",
+      lsp = {
+        diagnostics_trigger_update = true,
+      },
+    },
+  },
+
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    keys = {
+      { "<leader>re", mode = "v", function() require("refactoring").refactor "Extract Function" end, desc = "Extract function" },
+      { "<leader>rf", mode = "v", function() require("refactoring").refactor "Extract Function To File" end, desc = "Extract function to file" },
+      { "<leader>rv", mode = "v", function() require("refactoring").refactor "Extract Variable" end, desc = "Extract variable" },
+      { "<leader>ri", mode = { "n", "v" }, function() require("refactoring").refactor "Inline Variable" end, desc = "Inline variable" },
+      { "<leader>rb", function() require("refactoring").refactor "Extract Block" end, desc = "Extract block" },
+      { "<leader>rB", function() require("refactoring").refactor "Extract Block To File" end, desc = "Extract block to file" },
+      { "<leader>rr", mode = "v", function() require("refactoring").select_refactor() end, desc = "Select refactor" },
+    },
+    config = true,
+  },
+
+  {
+    "rcarriga/nvim-notify",
+    event = "VeryLazy",
+    config = function()
+      local notify = require "notify"
+      notify.setup {
+        stages = "fade_in_slide_out",
+        timeout = 3000,
+        fps = 60,
+        render = "compact",
+        max_height = function()
+          return math.floor(vim.o.lines * 0.5)
+        end,
+        max_width = function()
+          return math.floor(vim.o.columns * 0.4)
+        end,
+        on_open = function(win)
+          vim.api.nvim_win_set_config(win, { zindex = 100 })
+        end,
+      }
+      vim.notify = notify
+    end,
+  },
+
+  {
+    "folke/zen-mode.nvim",
+    cmd = "ZenMode",
+    keys = {
+      { "<leader>z", "<cmd>ZenMode<cr>", desc = "Toggle zen mode" },
+    },
+    dependencies = {
+      {
+        "folke/twilight.nvim",
+        opts = {
+          dimming = { alpha = 0.4 },
+          context = 15,
+        },
+      },
+    },
+    opts = {
+      window = {
+        backdrop = 1,
+        width = 90,
+        height = 0.9,
+        options = {
+          signcolumn = "no",
+          number = false,
+          relativenumber = false,
+          cursorline = false,
+          foldcolumn = "0",
+          list = false,
+        },
+      },
+      plugins = {
+        options = {
+          enabled = true,
+          ruler = false,
+          showcmd = false,
+          laststatus = 0,
+        },
+        twilight = { enabled = true },
+        gitsigns = { enabled = false },
+      },
+    },
   },
 }
