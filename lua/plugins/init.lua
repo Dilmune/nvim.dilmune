@@ -272,7 +272,22 @@ return {
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    opts = { preset = "modern" },
+    opts = {
+      preset = "modern",
+      spec = {
+        { "<leader>f", group = "find" },
+        { "<leader>g", group = "git" },
+        { "<leader>a", group = "ai" },
+        { "<leader>x", group = "trouble" },
+        { "<leader>h", group = "harpoon" },
+        { "<leader>q", group = "session" },
+        { "<leader>s", group = "search" },
+        { "<leader>c", group = "code" },
+        { "<leader>t", group = "terminal" },
+        { "<leader>r", group = "refactor" },
+        { "<leader>b", group = "buffer" },
+      },
+    },
   },
 
   {
